@@ -13,13 +13,22 @@ public class gamepanel extends JPanel implements Runnable{
 	
 	//Panel Settings
 	final int origTileSize = 16; //16 pixels size ng characters/tiles
-	final int scale = 2;
-	public final int tileSize = origTileSize * scale; //32 tile
+	final int scale = 3;
+	public final int tileSize = origTileSize * scale; //48x48 tile
 	public final int maxScreenCol = 20;
 	public final int maxScreenRow = 15;
-	final int screenWidth = tileSize * maxScreenCol; //640 by 480
-	final int screenHeight = tileSize * maxScreenRow; 
+	public final int screenWidth = tileSize * maxScreenCol; //960 by 720
+	public final int screenHeight = tileSize * maxScreenRow; 
+	public final int maxMap = 10; 
+	public final int currentMap = 0; 
 	int fps = 60; 
+	
+	//World
+	public final int maxWorldColumns = 50;
+	public final int maxWorldRow = 50;
+	public final int worldWidth = tileSize * maxWorldColumns;
+	public final int worldHeight = tileSize * maxWorldRow;
+	
 	
 	
 	//Tiles
@@ -27,10 +36,14 @@ public class gamepanel extends JPanel implements Runnable{
 	keyhandler keyhandler = new keyhandler(this);
 	Thread gameThread;
 	state state = new state(this); 
+	public collisionChecker collisionCheck = new collisionChecker(this);
+	
+	
+	//Sounds
 	sounds sounds = new sounds();
 	
 	//Entity
-	player player = new player(this,keyhandler);
+	public player player = new player(this,keyhandler);
 	
 
 	//Game State
@@ -108,7 +121,9 @@ public class gamepanel extends JPanel implements Runnable{
 		
 		//Title Screen
 		if(gamestate == titlescreen) {
+		
 			state.paintComponent(graphics2d);
+			
 			
 		
 		} 
@@ -130,6 +145,6 @@ public class gamepanel extends JPanel implements Runnable{
 			sounds.loop();
 	
 	}	public void kantastop() {
-		sounds.stop();
+		   sounds.stop();
 		}
 	}

@@ -1,6 +1,7 @@
 package character;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -9,27 +10,36 @@ import javax.imageio.ImageIO;
 import main.gamepanel;
 import main.keyhandler;
 
-
 public class player extends entityImage {
 
 	gamepanel gamepanel;
 	keyhandler keyhandler; 
 	
+	public final int screenX;
+	public final int screenY;
 	
 	public player(gamepanel gamepanel, keyhandler keyhandler) {
 		
 		this.gamepanel = gamepanel;
 		this.keyhandler = keyhandler; 
 		
+		screenX = gamepanel.screenWidth/2 - (gamepanel.tileSize/2);
+		screenY = gamepanel.screenHeight/2 - (gamepanel.tileSize/2);
+		
+		solidAreaRectangle = new Rectangle();
+		solidAreaRectangle.x = 8;
+		solidAreaRectangle.y = 16;
+		solidAreaRectangle.width = 32;
+		solidAreaRectangle.height = 32;
 		defaultvalue();
 		getPlayerImage();
 	}
 	
 	public void defaultvalue() {
 		
-		x = 100;
-		y = 100; 
-		speed = 2; 
+		Worldx = gamepanel.tileSize * 24;
+		Worldy = gamepanel.tileSize * 14; 
+		speed = 3; 
 		directionString = "UP"; 
 	
 	}
@@ -58,17 +68,34 @@ public class player extends entityImage {
 			
 			if (keyhandler.up == true) {
 				directionString = "UP";
-				y -= speed;
 			} else if (keyhandler.down == true) {
 				directionString = "DOWN";
-				y += speed;
 			} else if (keyhandler.left == true) {
 				directionString = "LEFT";
-				x -= speed;
 			} else if (keyhandler.right == true) {
 				directionString = "RIGHT";
-				x += speed;
+
 			}
+			
+			CollisionISOn = false;
+			gamepanel.collisionCheck.collisiontile(this);
+			
+			if (CollisionISOn == false) {
+				switch (directionString) {
+				case "UP":
+					Worldy -= speed;
+					break;
+				case "DOWN":
+					Worldy += speed;
+					break;	
+				case "LEFT":
+					Worldx -= speed;
+					break;	
+				case "RIGHT":
+					Worldx += speed;
+					break;
+			}
+		}
 			
 			spriteCounter++;
 			if (spriteCounter > 12) {
@@ -119,7 +146,7 @@ public class player extends entityImage {
 		} else {
 			image = STATIC;
 	
-	  } graphics2d.drawImage(image, x, y, gamepanel.tileSize, gamepanel.tileSize, null);
+	  } graphics2d.drawImage(image, screenX, screenY, gamepanel.tileSize, gamepanel.tileSize, null);
 	}
 	
 }

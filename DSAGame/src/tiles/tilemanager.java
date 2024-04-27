@@ -1,15 +1,16 @@
 package tiles;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.awt.Graphics2D;
 
 
 
 import javax.imageio.ImageIO;
 
+import main.TOOL;
 import main.gamepanel;
 
 public class tilemanager {
@@ -17,54 +18,83 @@ public class tilemanager {
 		gamepanel gamepanel; 
 		public tile[] tile;
 		public int maptileno[][];
+		boolean drawPath = false;
+		ArrayList<String> fileNameArrayList = new ArrayList<String>();
+		ArrayList<String> collisionStatuStrings = new ArrayList<String>();
 		
 		
 		public tilemanager(gamepanel gamepanel) {
 			this.gamepanel = gamepanel; 
-			tile = new tile[10];
-		    maptileno = new int[gamepanel.maxWorldColumns][gamepanel.maxWorldRow];
 			
-			gettileImage();
-			loadmap("/maps/map01.txt"); 
+			InputStream is = getClass().getResourceAsStream("/maps/tiledata.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			
+			String line; 
+			
+			try {
+				while ((line = br.readLine()) != null) {
+					fileNameArrayList.add(line);
+					collisionStatuStrings.add(br.readLine());
+				}
+				br.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			
+			
+			tile = new tile[fileNameArrayList.size()];
+		    gettileImage();
+		    
+		    is = getClass().getResourceAsStream("/maps/MAP1.txt");
+		    br = new BufferedReader(new InputStreamReader(is));
+		    
+		    try {
+				String lineString = br.readLine();
+				String maxTile[] = lineString.split(" ");
+				
+				gamepanel.maxWorldColumns = maxTile.length;
+				gamepanel.maxWorldRow = maxTile.length;
+				maptileno = new int[gamepanel.maxWorldColumns][gamepanel.maxWorldRow];
+				
+				br.close();
+				
+			} catch (Exception e) {
+				System.out.println("di nagana");
+			}
+		
+		    loadmap("/maps/MAP1.txt");
+			
+			
 		}
 		
 		public void gettileImage() {
-			try {
+			for(int i = 0; i < fileNameArrayList.size(); i++) {
+				String filename;
+				boolean collision; 
 				
-				tile[0] = new tile();
-				tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/Black.png"));
+				filename = fileNameArrayList.get(i);
+				
+				if (collisionStatuStrings.get(i).equals("true")) {
+					collision = true;
+				} else {
+					collision = false;
+					}
+				setup (i, filename, collision);
+				}
+			}
+		
+		public void setup(int index, String imagename, boolean collision) {
+			TOOL utiltool = new TOOL();
 			
-				tile[1] = new tile();
-				tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/Tile_bottomleftmost.png"));
+			try {
+				tile[index] = new tile();
+				tile[index].image = ImageIO.read(getClass().getResource("/tiles/" + imagename));
+				tile[index].image = utiltool.scaleImage(tile[index].image, gamepanel.tileSize, gamepanel.tileSize);
+				tile[index].collision = collision; 
 				
-				
-				tile[2] = new tile();
-				tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall_left.png"));
-				tile[2].collision = true;
-				
-				tile[3] = new tile();
-				tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/walltop1.png"));
-				tile[3].collision = true;
-				
-				tile[4] = new tile();
-				tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/walltop2.png"));
-				tile[4].collision = true;
-				
-				tile[5] = new tile();
-				tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall_right.png"));
-				tile[5].collision = true;
-				
-				tile[6] = new tile();
-				tile[6].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wallbottom.png"));
-				
-				tile[7] = new tile();
-				tile[7].image = ImageIO.read(getClass().getResourceAsStream("/tiles/walledge.png"));
-				
-				tile[8] = new tile();
-				tile[8].image = ImageIO.read(getClass().getResourceAsStream("/tiles/walledgeright.png"));
-				
-				
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -113,7 +143,7 @@ public class tilemanager {
 				int screenY = worldY - gamepanel.player.Worldy + gamepanel.player.screenY;
 				
 				
-				graphics2d.drawImage(tile[tilenumber].image, screenX, screenY, gamepanel.tileSize, gamepanel.tileSize, null);
+				graphics2d.drawImage(tile[tilenumber].image, screenX, screenY, null);
 				worldColumn++;
 
 				

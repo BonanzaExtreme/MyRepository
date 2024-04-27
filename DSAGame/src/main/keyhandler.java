@@ -26,6 +26,7 @@ public class keyhandler implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		
 		int code = e.getKeyCode();
+		
 		//Main menu
 		if(gamepanel.gamestate == gamepanel.titlescreen){
 			if(code == KeyEvent.VK_W) {
@@ -72,6 +73,14 @@ public class keyhandler implements KeyListener{
 		
 		//Pause 
 		if(gamepanel.gamestate == gamepanel.pausescreen) {
+			
+		}
+		
+		//Dialogue
+		if (gamepanel.gamestate == gamepanel.dialogue) {
+			if (code == KeyEvent.VK_ENTER) {
+				gamepanel.gamestate = gamepanel.startstate;
+			}
 		}
 	}
 

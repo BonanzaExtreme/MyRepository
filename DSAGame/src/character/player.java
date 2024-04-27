@@ -7,21 +7,24 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.TOOL;
 import main.gamepanel;
 import main.keyhandler;
 
 public class player extends entityImage {
 
-	gamepanel gamepanel;
 	keyhandler keyhandler; 
 	
 	public final int screenX;
 	public final int screenY;
+	int keyno = 0;
 	
 	public player(gamepanel gamepanel, keyhandler keyhandler) {
 		
-		this.gamepanel = gamepanel;
+		super(gamepanel);
+		
 		this.keyhandler = keyhandler; 
+		
 		
 		screenX = gamepanel.screenWidth/2 - (gamepanel.tileSize/2);
 		screenY = gamepanel.screenHeight/2 - (gamepanel.tileSize/2);
@@ -29,6 +32,8 @@ public class player extends entityImage {
 		solidAreaRectangle = new Rectangle();
 		solidAreaRectangle.x = 8;
 		solidAreaRectangle.y = 16;
+		solidareadefaultx = solidAreaRectangle.x;
+		solidareadefauly = solidAreaRectangle.y;
 		solidAreaRectangle.width = 32;
 		solidAreaRectangle.height = 32;
 		defaultvalue();
@@ -37,30 +42,30 @@ public class player extends entityImage {
 	
 	public void defaultvalue() {
 		
-		Worldx = gamepanel.tileSize * 24;
-		Worldy = gamepanel.tileSize * 14; 
-		speed = 3; 
+		Worldx = gamepanel.tileSize * 25;
+		Worldy = gamepanel.tileSize * 15; 
+		speed = 2; 
 		directionString = "UP"; 
+		
+		//player life 
+		maxLife = 6;
+		life = maxLife;
 	
 	}
 	
 	public void getPlayerImage() {
-		try {
-			UP1 = ImageIO.read(getClass().getResourceAsStream("/player/Character_UP1.png"));
-			UP2 = ImageIO.read(getClass().getResourceAsStream("/player/Character_UP2.png"));
-			DOWN1 = ImageIO.read(getClass().getResourceAsStream("/player/Character_down1.png"));
-			DOWN2 = ImageIO.read(getClass().getResourceAsStream("/player/Character_down2.png"));
-			RIGHT1 = ImageIO.read(getClass().getResourceAsStream("/player/Character_RIGHT1.png"));
-			RIGHT2 = ImageIO.read(getClass().getResourceAsStream("/player/Character_RIGHT2.png"));
-			LEFT1 = ImageIO.read(getClass().getResourceAsStream("/player/Character_LEFT1.png"));
-			LEFT2 = ImageIO.read(getClass().getResourceAsStream("/player/Character_LEFT2.png"));
- 			STATIC = ImageIO.read(getClass().getResourceAsStream("/player/Character.png"));
-					
-					
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		UP1 = setup("/player/MainChar_UP1");
+		UP2 = setup("/player/MainChar_UP2");
+		DOWN1 = setup("/player/MainChar_DOWN1");
+		DOWN2 = setup("/player/MainChar_DOWN2");
+		RIGHT1= setup("/player/MainChar_RIGHT1");
+		RIGHT2 = setup("/player/MainChar_RIGHT2");
+		LEFT1 = setup("/player/MainChar_LEFT1");
+		LEFT2 = setup("/player/MainChar_LEFT2");
+		STATIC = setup("/player/MainChar_Static");
 	}
+	
 
 	public void update() {
 		
@@ -80,6 +85,15 @@ public class player extends entityImage {
 			CollisionISOn = false;
 			gamepanel.collisionCheck.collisiontile(this);
 			
+			int objectIndex = gamepanel.collisionCheck.checkObject(this, true);
+			objectInteraction(objectIndex); 
+			
+			//collision for NPC
+			int npcIndex = gamepanel.collisionCheck.entityCollision(this, gamepanel.NPC);
+			npcInteraction(npcIndex);
+			
+			
+			//Player movement collision
 			if (CollisionISOn == false) {
 				switch (directionString) {
 				case "UP":
@@ -109,13 +123,44 @@ public class player extends entityImage {
 		}	
 	}
 		
+	//NPC Interaction
+	public void npcInteraction(int i) {
+		if (i != 999) {
+			 gamepanel.gamestate = gamepanel.dialogue;
+			 gamepanel.NPC[i].speak();
+			 gamepanel.state.image = gamepanel.NPC[i].STATIC;
+		}
+	}
+	
+	
+	//Interaction object
+	public void objectInteraction(int i) {
+		
+		if (i != 999) {
+			String objectString = gamepanel.object[i].name; 
+				
+			if (objectString == "key") {
+					keyno++;
+					gamepanel.object[i] = null;
+				}
+			if (objectString == "Door") {
+				if (keyno > 0) {
+					gamepanel.object[i] = null;
+				}
+			 	}
+			}
+			
+		}
 	
 	
 	public void paintComponent(Graphics2D graphics2d) {
 		
 		BufferedImage image = null;
 		if (keyhandler.up || keyhandler.down || keyhandler.left || keyhandler.right) {
+			
+			
 		if (directionString == "UP") {
+		
 			if (spriteNum == 1) {
 				image = UP1; 				
 			} else if (spriteNum == 2) {
@@ -146,7 +191,7 @@ public class player extends entityImage {
 		} else {
 			image = STATIC;
 	
-	  } graphics2d.drawImage(image, screenX, screenY, gamepanel.tileSize, gamepanel.tileSize, null);
+	  } graphics2d.drawImage(image, screenX, screenY,  null);
 	}
 	
 }

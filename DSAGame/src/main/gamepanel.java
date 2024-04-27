@@ -4,9 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Iterator;
+
 import javax.swing.JPanel;
 
+import character.entityImage;
+import character.npc_1;
 import character.player;
+import objectfolder.parentObject;
 import tiles.tilemanager;
 
 public class gamepanel extends JPanel implements Runnable{
@@ -24,26 +29,37 @@ public class gamepanel extends JPanel implements Runnable{
 	int fps = 60; 
 	
 	//World
-	public final int maxWorldColumns = 50;
-	public final int maxWorldRow = 50;
+	public int maxWorldColumns;
+	public int maxWorldRow;
 	public final int worldWidth = tileSize * maxWorldColumns;
 	public final int worldHeight = tileSize * maxWorldRow;
 	
 	
 	
-	//Tiles
+	//initialize
 	tilemanager tilemanager = new tilemanager(this); 
 	keyhandler keyhandler = new keyhandler(this);
 	Thread gameThread;
-	state state = new state(this); 
+	public state state = new state(this); 
+	public Assetstarter objectsetter = new Assetstarter(this);
 	public collisionChecker collisionCheck = new collisionChecker(this);
-	
+	public cutsceneManage sceneManager  = new cutsceneManage(this);
 	
 	//Sounds
 	sounds sounds = new sounds();
 	
 	//Entity
 	public player player = new player(this,keyhandler);
+
+	
+	//Object
+	public parentObject object[] = new parentObject[10];
+	
+	//NPC ARRAY
+	public entityImage NPC[] = new entityImage[5];	
+	
+	//Monster Array
+	public entityImage monster[] = new entityImage[10];
 	
 
 	//Game State
@@ -51,6 +67,7 @@ public class gamepanel extends JPanel implements Runnable{
 	public final int titlescreen = 0;
 	public final int pausescreen = 1;
 	public final int startstate = 2;
+	public final int dialogue = 3; 
 
 	//panel
 	public gamepanel(){
@@ -62,7 +79,9 @@ public class gamepanel extends JPanel implements Runnable{
 	}
 		
 	public void setUp() {
-		
+		objectsetter.setObject();
+		objectsetter.setMonster();
+		objectsetter.setNPC();
 		gamestate = titlescreen; 
 		playKanta(0);
 	}
@@ -105,10 +124,25 @@ public class gamepanel extends JPanel implements Runnable{
 		
 		if(gamestate == startstate) {
 		player.update();
-	
-		}
 		
+		//NPC
+		for(int i = 0; i < NPC.length; i++) {
+			if (NPC[i] != null) {
+				NPC[i].update();
+			}
+		} 
+		//Monster
+		for (int i = 0; i < monster.length; i++) {
+			if (monster[i] != null) {
+				monster[i].update();
+				} 
+			}
+		}	
+		if (gamestate == pausescreen) {
+			//wala pa
+		}
 	}
+	
 	
 	public void paintComponent(Graphics g) {
 		
@@ -125,15 +159,36 @@ public class gamepanel extends JPanel implements Runnable{
 			state.paintComponent(graphics2d);
 			
 			
-		
 		} 
 	
 		 else {
 			
 			tilemanager.draw(graphics2d);
 			kantastop();
+			//Object
+			for(int i = 0; i < object.length; i++) {
+				if(object[i] != null) {
+					object[i].draw(graphics2d, this);
+				}
+			}
+			
+			//NPC DRAW
+			for(int i = 0; i < NPC.length; i++) {
+				if (NPC[i] != null) {
+					NPC[i].draw(graphics2d);
+				}
+			}
+			
+			//Monster Draw
+			for(int i = 0; i < monster.length; i++) {
+				if (monster[i] != null) {
+					monster[i].draw(graphics2d);
+				}
+			}
+			
 			//player
 			player.paintComponent(graphics2d);
+			state.paintComponent(graphics2d);
 			
 		}
 		

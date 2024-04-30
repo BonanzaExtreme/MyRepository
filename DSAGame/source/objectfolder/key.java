@@ -23,13 +23,14 @@ public class key extends entityImage {
 		
 		int objectDetected = getDetected(entity, gamepanel.object, "Door");
 		if (objectDetected != 999) {
-			gamepanel.state.currentDialogueString = "You used the and opened the door";
+			gamepanel.state.currentDialogueString = "You used the " + name + " and opened the door";
 			gamepanel.object[gamepanel.currentMap][objectDetected] = null;
 			return true;
 		}
 		else {
-			gamepanel.state.currentDialogueString = "YOU CANT USE THAT HERE!";
+			gamepanel.state.currentDialogueString = "YOU CAN'T USE THAT HEREEEEEEEE!!!! >:( ";
 			return false;
+			
 		}
 		
 	}

@@ -10,7 +10,8 @@ public class chest_design extends entityImage{
 		
 		type = type_design;
 		name = "chest_design";
-		STATIC = setup("/objects/chest_design", gamepanel.tileSize, gamepanel.tileSize);
+		STATIC =  setup("/objects/chest_design", gamepanel.tileSize, gamepanel.tileSize); 
+		
 		collision = true; 
 	
 	}

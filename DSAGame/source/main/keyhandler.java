@@ -125,7 +125,7 @@ public class keyhandler implements KeyListener{
 			
 			
 			}
-			if (code == KeyEvent.VK_ENTER) {
+			if (code == KeyEvent.VK_1) {
 				gamepanel.player.selectItem();
 			}
 		}	

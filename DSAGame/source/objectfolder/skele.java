@@ -20,4 +20,11 @@ public class skele extends entityImage {
 		solidareadefauly = solidAreaRectangle.y;
 	
 	}
+	
+	public void interact() {
+		gamepanel.gamestate = gamepanel.dialogue; 
+		gamepanel.state.currentDialogueString = "What is that?";
+		
+		
+	}
 }

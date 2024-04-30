@@ -330,7 +330,6 @@ import objectfolder.potion;
 				
 				if (selectedItem.type == type_consumable) {
 					if (selectedItem.use(this) == true) {
-						selectedItem.use(this);
 						inventory.remove(itemIndex);	
 					}
 					

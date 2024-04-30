@@ -15,6 +15,7 @@ public class Door extends entityImage {
 		
 		name = "Door";
 		STATIC = setup("/objects/Gate_FRONT", gamepanel.tileSize, gamepanel.tileSize);
+		
 		collision = true; 
 			
 		solidAreaRectangle.x = 0;
@@ -26,7 +27,7 @@ public class Door extends entityImage {
 	}
 	
 	
-	public void interact(int state) {
+	public void interact() {
 		gamepanel.gamestate = gamepanel.dialogue; 
 		gamepanel.state.currentDialogueString = "YOU NEED KEY!";
 		

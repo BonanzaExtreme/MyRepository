@@ -9,7 +9,7 @@ import javax.sound.sampled.Clip;
 public class sounds {
 
 	Clip clip; 
-	URL soundUrl[] = new URL[10];
+	URL soundUrl[] = new URL[14];
 	
 	public sounds() {
 		
@@ -18,6 +18,8 @@ public class sounds {
 		soundUrl[2] = getClass().getResource("/Sounds/swingsword.wav");
 		soundUrl[3] = getClass().getResource("/Sounds/PlayerReceiveDamage.wav");
 		soundUrl[4] = getClass().getResource("/Sounds/zombieReceiveDamage.wav");
+		soundUrl[5] = getClass().getResource("/Sounds/gamemusic.wav");
+		soundUrl[6] = getClass().getResource("/Sounds/roar.wav");
 		
 	}
 	public void setFile(int i) {

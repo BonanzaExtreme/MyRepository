@@ -5,17 +5,25 @@
 	import java.awt.Graphics2D;
 	import java.awt.Rectangle;
 	import java.awt.image.BufferedImage;
-	
-	import main.gamepanel;
+import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
+
+import org.w3c.dom.Text;
+
+import main.gamepanel;
 	import main.keyhandler;
 	import main.sounds;
 	import main.state;
+import objectfolder.key;
+import objectfolder.potion;
 	
 	public class player extends entityImage {
 	
 		keyhandler keyhandler; 
 		public final int screenX;
 		public final int screenY;
+		public ArrayList<entityImage> inventory = new ArrayList<>();
+		public final int maxinventorysize = 10;
 		int keyno = 0;
 		
 		public player(gamepanel gamepanel, keyhandler keyhandler) {
@@ -37,12 +45,13 @@
 			solidAreaRectangle.height = 32;
 			
 			//PLAYER ATTACK
-			attackRangeRectangle.width = 36;
-			attackRangeRectangle.height = 36;	
+			attackRangeRectangle.width = 48;
+			attackRangeRectangle.height = 48;	
 			
 			defaultvalue();
 			getPlayerImage();
 			getPlayerAttackImage();
+			setItem();
 		}
 		
 		public void defaultvalue() {
@@ -52,6 +61,8 @@
 			speed = 2; 
 			directionString = "STATIC"; 
 			invincible = false;
+			gamepanel.currentMap = 0; 
+	
 			
 			//player life 
 			maxLife = 6;
@@ -59,7 +70,7 @@
 		
 		}
 
-		
+
 		
 		public void getPlayerImage() {
 			
@@ -127,7 +138,7 @@
 				monsterInteraction(monsterIndex);
 				
 				regentimer++;
-			    if (regentimer > 200 && life < maxLife) { 
+			    if (regentimer > 100 && life < maxLife) { 
 			        life++;
 			        if (life > maxLife) {
 			            life = maxLife;
@@ -181,16 +192,21 @@
 				}
 			}
 			
-			if (life > maxLife) {
-				life = maxLife;
+				if (life > maxLife) {
+					life = maxLife;
+				}
+				
+				if (life <= 0) {
+					gamepanel.gamestate = gamepanel.gameover;
+					gamepanel.playSoundEffect(1);
+			     
+				}
 			}
-			
-			if (life <= 0) {
-				gamepanel.gamestate = gamepanel.gameover;
-				gamepanel.playSoundEffect(1);
-			}
-		}
 		
+		public void setItem() {
+			
+		}
+			
 		public void attackingMeth() {
 			
 			spriteCounter++;
@@ -283,20 +299,44 @@
 		public void objectInteraction(int i) {
 			
 			if (i != 999) {
-				String objectString = gamepanel.object[gamepanel.currentMap][i].name; 
+			
+				if (gamepanel.object[gamepanel.currentMap][i].type == type_pickup) {
+					gamepanel.object[gamepanel.currentMap][i].use(this);
+					gamepanel.object[gamepanel.currentMap][i] = null;
 					
-				if (objectString == "key") {
-						keyno++;
-						gamepanel.object[gamepanel.currentMap][i] = null;
+				} else if (gamepanel.object[gamepanel.currentMap][i].type == type_door) {
+					if (gamepanel.keyhandler.enter == true) {
+						gamepanel.object[gamepanel.currentMap][i].interact();
+						
 					}
-				if (objectString == "Door") {
-					if (keyno > 0) {
-						gamepanel.object[gamepanel.currentMap][i] = null;
+					
+					
+				} else {
+					
+					if (inventory.size() != maxinventorysize) {
+						inventory.add(gamepanel.object[gamepanel.currentMap][i]);
+						
 					}
-				 	}
-				}
+					gamepanel.object[gamepanel.currentMap][i] = null;
+				} 
 				
 			}
+		}
+		
+		public void selectItem() {
+			int itemIndex = gamepanel.state.getItemIndexSlot();
+			if (itemIndex < inventory.size()) {
+				entityImage selectedItem = inventory.get(itemIndex);
+				
+				if (selectedItem.type == type_consumable) {
+					if (selectedItem.use(this) == true) {
+						selectedItem.use(this);
+						inventory.remove(itemIndex);	
+					}
+					
+				} 
+			} 
+		}
 		
 		
 		public void draw(Graphics2D graphics2d) {
@@ -304,14 +344,16 @@
 		    int temporaryx = screenX;
 		    int temporaryy = screenY;
 	
-
 		    	switch (directionString) {
 				case "UP": 
 					   if (attacking == false) {
 			            	if (spriteNum == 1) {
-				                image = UP1;
+			            		
+			            		image = UP1;
+				                
 				            } else if (spriteNum == 2) {
-				                image = UP2;
+				            	image = UP2;
+				                
 				            }
 			            }
 					   if (attacking == true) {

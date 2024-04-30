@@ -8,8 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
-
+import java.util.Iterator;
 
 import character.entityImage;
 import objectfolder.Heart;
@@ -24,8 +23,10 @@ public class state {
 	public BufferedImage image;
 	Font minecraft; 
 	public int commandNO = 0;
-	public String currentDialogueString = " ";
-	
+	public String currentDialogueString = "";
+	int counter = 0;
+	public int slotcol = 0;
+	public int slotrow = 0;
 	
 	public state(gamepanel gamepanel) {
 		this.gamepanel = gamepanel;
@@ -59,6 +60,7 @@ public class state {
 		//Play
 		if(gamepanel.gamestate == gamepanel.startstate) {
 			drawPlayerHeart();
+			
 		}
 			//Pause
 		if (gamepanel.gamestate == gamepanel.pausescreen) {
@@ -73,6 +75,13 @@ public class state {
 		//Game over state
 		if (gamepanel.gamestate == gamepanel.gameover) {
 			drawGameoverScreen();
+		}
+		if (gamepanel.gamestate == gamepanel.transition) {
+			drawTransition();
+		}
+		if (gamepanel.gamestate == gamepanel.characterstate) {
+			drawInventory();
+			drawPlayerHeart();
 		}
 	}
 	
@@ -135,6 +144,85 @@ public class state {
 	
 
 	}
+	public void drawTransition() {
+		counter ++;
+		graphics2d.setColor(new Color(0,0,0,counter*4));
+		graphics2d.fillRect(0, 0, gamepanel.screenWidth, gamepanel.screenHeight);
+		
+		if (counter == 50) {
+			counter = 0;
+			gamepanel.gamestate = gamepanel.startstate;
+			gamepanel.currentMap = gamepanel.eventRect.tempmap;
+			gamepanel.player.Worldx = gamepanel.tileSize * gamepanel.eventRect.tempcol;
+			gamepanel.player.Worldy = gamepanel.tileSize * gamepanel.eventRect.temprow;
+			gamepanel.eventRect.previousEventX = gamepanel.player.Worldx;
+			gamepanel.eventRect.previousEventY = gamepanel.player.Worldy;
+		}
+	}
+	
+	public void drawInventory() {
+		int frameX =  gamepanel.tileSize*2;
+		int frameY =  gamepanel.tileSize*3;
+		int frameWidth = gamepanel.tileSize*4; 
+		int frameHeight =  gamepanel.tileSize*6;
+		drawsubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+		final int slotXstart = frameX + 20;
+		final int slotYstart = frameY + 20;
+		int slotx = slotXstart;
+		int sloty = slotYstart;
+		
+		//Player item
+		for (int i = 0; i < gamepanel.player.inventory.size(); i++) {
+			graphics2d.drawImage(gamepanel.player.inventory.get(i).STATIC, slotx, sloty, null);
+			slotx += gamepanel.tileSize;
+			
+			if (i == 2 || i == 5 || i == 8 || i == 11  ) {
+				slotx = slotXstart;
+				sloty += gamepanel.tileSize;
+				
+			}
+		}
+		
+		int cursorX = slotXstart + (gamepanel.tileSize * slotcol);
+		int cursorY = slotYstart + (gamepanel.tileSize * slotrow);
+		int cursorWidth = gamepanel.tileSize;
+		int cursorHeight  = gamepanel.tileSize;
+		
+		graphics2d.setColor(Color.white);
+		graphics2d.setStroke(new BasicStroke(3));
+		graphics2d.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+		
+		
+		int descriptionFrameX = frameX;
+		int descriptionFrameY = frameY + frameHeight + 2;
+		int descriptionFrameWidth = frameWidth;
+		int descriptionFrameHeight = gamepanel.tileSize*2;
+		
+		
+		int textx = descriptionFrameX + 20;
+		int texty = descriptionFrameY + gamepanel.tileSize;
+		graphics2d.setFont(graphics2d.getFont().deriveFont(16f));
+		
+		int itemIndex = getItemIndexSlot();
+		if (itemIndex < gamepanel.player.inventory.size()) {
+			drawsubWindow(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
+			for(String lineString: gamepanel.player.inventory.get(itemIndex).descriptionString.split("\n")) {
+			graphics2d.drawString(lineString, textx, texty);
+			texty += 20;
+			
+			}
+		}
+	}
+	
+	
+	
+	public int getItemIndexSlot() {
+		int itemIndex = slotcol + (slotrow *3);
+		return itemIndex;
+	}
+	
+	
 	
 	public void drawsubWindow(int x, int y, int width, int height) {
 		

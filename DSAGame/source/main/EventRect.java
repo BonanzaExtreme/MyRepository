@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Rectangle;
 
+import javax.swing.text.GapContent;
+
 import character.player;
 import tiles.tilemanager;
 
@@ -11,6 +13,7 @@ public class EventRect {
 	
 	int previousEventX, previousEventY;
 	boolean canInteract = true;
+	int tempmap, tempcol, temprow;
 
 	
 	public EventRect(gamepanel gamepanel) {
@@ -50,12 +53,13 @@ public class EventRect {
 		int xDistance = Math.abs(gamepanel.player.Worldx - previousEventX);
 		int yDistance = Math.abs(gamepanel.player.Worldy - previousEventY);
 		int distance = Math.max(xDistance, yDistance);	
+
 		
 		if (distance > gamepanel.tileSize) {
 			canInteract = true;
 		}
 		if (canInteract == true) {
-			if(hit(0,7,49,"DOWN") == true) {
+			if(hit(0,7,48,"DOWN") == true) {
 				teleport(1,	14,12);
 			} 
 			
@@ -92,13 +96,13 @@ public class EventRect {
 	}
 	
 	public void teleport(int map, int col, int row) {
-		gamepanel.currentMap = map;
-		gamepanel.player.Worldx = gamepanel.tileSize * col;
-		gamepanel.player.Worldy = gamepanel.tileSize * row;
-		previousEventX = gamepanel.player.Worldx;
-		previousEventY = gamepanel.player.Worldy;
+		gamepanel.gamestate = gamepanel.transition;
+		tempmap = map;
+		tempcol = col;
+		temprow = row;
 		canInteract = false;
 	}
+	
 }
 	
 

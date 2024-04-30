@@ -2,13 +2,17 @@ package main;
 
 import character.entityImage;
 import character.npc_1;
+import character.player;
 import monster.monster1;
+import monster.monster2;
 import objectfolder.Door;
+import objectfolder.Door2;
 import objectfolder.Heart;
 import objectfolder.chest;
 import objectfolder.chest_design;
 import objectfolder.doorside;
 import objectfolder.key;
+import objectfolder.potion;
 import objectfolder.skele;
 
 public class ResourceStarter {
@@ -36,6 +40,11 @@ public class ResourceStarter {
 		gamepanel.object[mapNumber][2] = new chest(gamepanel);
 		gamepanel.object[mapNumber][2].Worldx = gamepanel.tileSize*35;
 		gamepanel.object[mapNumber][2].Worldy = gamepanel.tileSize*27;
+		
+		gamepanel.object[mapNumber][17] = new potion(gamepanel);
+		gamepanel.object[mapNumber][17].Worldx = gamepanel.tileSize*25;
+		gamepanel.object[mapNumber][17].Worldy = gamepanel.tileSize*17;
+
 		
 		
 		//CHEST DESIGN NOT INTERACTIVE
@@ -72,9 +81,14 @@ public class ResourceStarter {
 		gamepanel.object[mapNumber][10].Worldx = gamepanel.tileSize*33;
 		gamepanel.object[mapNumber][10].Worldy = gamepanel.tileSize*37;
 		
+		gamepanel.object[mapNumber][16] = new Door(gamepanel);
+		gamepanel.object[mapNumber][16].Worldx = gamepanel.tileSize*7;
+		gamepanel.object[mapNumber][16].Worldy = gamepanel.tileSize*48;
+		gamepanel.object[mapNumber][16].collision = false;
+		
 		
 		mapNumber = 1;
-		gamepanel.object[mapNumber][11] = new Door(gamepanel);
+		gamepanel.object[mapNumber][11] = new Door2(gamepanel);
 		gamepanel.object[mapNumber][11].Worldx = gamepanel.tileSize*22;
 		gamepanel.object[mapNumber][11].Worldy = gamepanel.tileSize*14;
 		
@@ -114,9 +128,16 @@ public class ResourceStarter {
 		gamepanel.object[mapNumber][15] = new doorside(gamepanel);
 		gamepanel.object[mapNumber][15].Worldx = gamepanel.tileSize*30;
 		gamepanel.object[mapNumber][15].Worldy = gamepanel.tileSize*33;
+		gamepanel.object[mapNumber][15].
 		
+		gamepanel.object[mapNumber][17] = new key(gamepanel);
+		gamepanel.object[mapNumber][17].Worldx = gamepanel.tileSize*14;
+		gamepanel.object[mapNumber][17].Worldy = gamepanel.tileSize*13;
+		gamepanel.object[mapNumber][17].collision = false;
 
 		
+		
+	
 	}
 	
 	public void setNPC() {
@@ -161,7 +182,10 @@ public class ResourceStarter {
 
 		
 		//LEVEL 2 monsters
-		
+		mapNumber = 1;
+		gamepanel.monster[mapNumber][7] = new monster2(gamepanel);
+		gamepanel.monster[mapNumber][7].Worldx = gamepanel.tileSize*22;
+		gamepanel.monster[mapNumber][7].Worldy = gamepanel.tileSize*15;
 
 	}
 }

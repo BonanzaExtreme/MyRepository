@@ -6,6 +6,7 @@ import java.util.Random;
 
 import character.entityImage;
 import main.gamepanel;
+import objectfolder.key;
 
 public class monster1 extends entityImage {
 	gamepanel gamepanel;
@@ -43,35 +44,30 @@ public class monster1 extends entityImage {
 			STATIC = setup("/enemies/monster1_static", gamepanel.tileSize, gamepanel.tileSize);
 	}
 
-	public void update() {
-		super.update();
-		
+
+	
+	//MONSTER ACTION
+	public void setAction() {
 		int xDistance = Math.abs(Worldx - gamepanel.player.Worldx);
 		int yDistance = Math.abs(Worldy - gamepanel.player.Worldy);
 		int tiledistance = (xDistance + yDistance)/gamepanel.tileSize;
 		
-		if(onPath == false && tiledistance < 4) {
-			int i = new Random().nextInt(100)+1;
-			if (i > 50) {
-				onPath = true;
-			}
-		}
-		if (onPath == true && tiledistance > 4) {
+		if (tiledistance > 4) {
 			onPath = false;
 		}
 		
-	}
-	
-	//MONSTER ACTION
-	public void setAction() {
-		
 		if (onPath == true) {
-			 int goalCol = (gamepanel.player.Worldx + gamepanel.player.solidAreaRectangle.x)/gamepanel.tileSize;
-			 int goalRow = (gamepanel.player.Worldy + gamepanel.player.solidAreaRectangle.y)/gamepanel.tileSize;
-			 
-			 searchPath(goalCol, goalRow);
-			 
-		} else {
+	
+			 searchPath(getGoalcol(gamepanel.player), getGoalrow(gamepanel.player));
+		}
+		
+		else {
+			if(onPath == false && tiledistance < 4) {
+				int i = new Random().nextInt(100)+1;
+				if (i > 50) {
+					onPath = true;
+				}
+			}
 
 			actionCounter ++;
 			if (actionCounter == 120) {
@@ -97,11 +93,21 @@ public class monster1 extends entityImage {
 				
 				actionCounter = 0; 	
 			}	
-		}	
+			
+		}
+	
 	}
 	public void damageReact() {
 		actionCounter = 0;
 		onPath = true;
+	}
+	
+	public void checkItemDrop() {
+		
+		int i = 100;
+		if (i == 100) {
+			droppedItem(new key(gamepanel));	
+		}
 	}
 	
 }	

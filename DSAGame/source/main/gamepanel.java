@@ -30,6 +30,9 @@ public class gamepanel extends JPanel implements Runnable{
 	public final int maxScreenRow = 15;
 	public final int screenWidth = tileSize * maxScreenCol; //960 by 720
 	public final int screenHeight = tileSize * maxScreenRow; 
+	
+	
+	private int currentIndex = -1;
  
 	int fps = 60; 
 	
@@ -84,6 +87,8 @@ public class gamepanel extends JPanel implements Runnable{
 	public final int startstate = 2;
 	public final int dialogue = 3; 
 	public final int gameover = 4; 
+	public final int transition = 5; 
+	public final int characterstate = 6;
 
 	//panel
 	public gamepanel(){
@@ -102,6 +107,7 @@ public class gamepanel extends JPanel implements Runnable{
 		gamestate = titlescreen; 
 		eManage.setup();
 		playKanta(0);
+	
 	}
 	
 	public void retry() {
@@ -150,6 +156,7 @@ public class gamepanel extends JPanel implements Runnable{
 		
 		if(gamestate == startstate) {
 			player.update();
+			
 		
 		//NPC
 		for(int i = 0; i < NPC[1].length; i++) {
@@ -164,6 +171,7 @@ public class gamepanel extends JPanel implements Runnable{
 					monster[currentMap][i].update();
 				}
 				if (monster[currentMap][i].alive == false) {
+					monster[currentMap][i].checkItemDrop();
 					monster[currentMap][i] = null;
 				}
 			}
@@ -187,9 +195,8 @@ public class gamepanel extends JPanel implements Runnable{
 			state.paintComponent(graphics2d);
 		} 
 		 else {
-			
 			tilemanager.draw(graphics2d);
-		
+	
 			//ADD ENTITIES TO THE LIST
 			
 			//Player
@@ -235,6 +242,8 @@ public class gamepanel extends JPanel implements Runnable{
 			entitylistArrayList.clear();
 			
 			eManage.draw(graphics2d);
+			
+			
 		}
 	
 		//STATE
@@ -248,15 +257,21 @@ public class gamepanel extends JPanel implements Runnable{
 			sounds.setFile(i);
 			sounds.play();
 			sounds.loop();
+			currentIndex = i;
 	
-	}	public void kantastop() {
-		   sounds.stop();
+		}
+		public void kantastop(int i) {
+			 if (currentIndex != -1) {
+			        sounds.stop();
+			        currentIndex = -1;
+			    }
+			
 		}
 	
 		public void playSoundEffect(int i) {
 			sounds.setFile(i);
 			sounds.play();
 		}
-	
+		
 	
 	}

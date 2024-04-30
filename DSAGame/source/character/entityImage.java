@@ -5,9 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.text.html.parser.Entity;
+
+import org.w3c.dom.UserDataHandler;
 
 import main.TOOL;
 import main.gamepanel;
@@ -15,12 +18,53 @@ import main.gamepanel;
 
 public class entityImage  {
 	
-	gamepanel gamepanel;
+	public gamepanel gamepanel;
 
 	public int Worldx, Worldy;
 	public int speed;
 	
+	//MONSTER DIRECTION
+	public int getXdistance(entityImage targetEntity) {
+		int xDistance = Math.abs(Worldx - targetEntity.Worldx);
+		return xDistance;
+	}
+	public int getYdistance(entityImage targetEntity) {
+		int yDistance = Math.abs(Worldy - targetEntity.Worldy);
+		return yDistance;
+	}
+
+	public int getTileDistance(entityImage targetEntity) {
+		int tiledistance = (getXdistance(targetEntity)) + getYdistance(targetEntity)/gamepanel.tileSize;
+		return tiledistance;
+	}
+	public int getGoalcol(entityImage targetEntity) {
+		 int goalCol = (targetEntity.Worldx + targetEntity.solidAreaRectangle.x)/gamepanel.tileSize;
+		 return goalCol;  
+	}
+	public int getGoalrow(entityImage targetEntity) {
+		 int goalRow = (targetEntity.Worldy + targetEntity.solidAreaRectangle.y)/gamepanel.tileSize;
+		 return goalRow;  
+	}
 	
+	//object detection
+	public int getleftx() {
+		return Worldx+ solidAreaRectangle.x;
+	}
+	public int getrightx() {
+		return Worldx + solidAreaRectangle.x + solidAreaRectangle.width;
+	}
+	public int getTopY() {
+		return Worldy + solidAreaRectangle.y;
+	}
+	public int getBottomY() {
+		return Worldy + solidAreaRectangle.y + solidAreaRectangle.height;
+	}
+	public int getCol() {
+		return (Worldx + solidAreaRectangle.x)/gamepanel.tileSize;
+	}
+	public int getRow() {
+		return (Worldy + solidAreaRectangle.y)/gamepanel.tileSize;
+	}
 	//MOVEMENT
 	public BufferedImage STATIC, UP1, UP2, DOWN1, DOWN2, RIGHT1, RIGHT2, LEFT1, LEFT2, attackdown1, 
 	attackdown2, attackleft1, attackleft2, attackright1, attackright2, attackup1, attackup2 ; 
@@ -57,6 +101,8 @@ public class entityImage  {
 	public final int type_door = 1;
 	public final int type_chest = 2;
 	public final int type_pickup = 4;
+	public final int type_design = 5;
+	public final int type_consumable = 6;
 	
 	//Health Mechanics GAME
 	public boolean invincible = false;
@@ -73,6 +119,9 @@ public class entityImage  {
 	public int maxLife;
 	public int life;
 	
+	//ITEM Description
+	public String descriptionString = "";
+	
 	
 	//ATTACKING ANIMATION
 	boolean attacking = false; 
@@ -87,20 +136,18 @@ public class entityImage  {
 	public void setAction() {}
 	public void damageReact() {}
 	public void speak() {}
-	public void interact() {
-		
-	}
+	public void interact() {}
 	
 	public void checkCollision() {
 		CollisionISOn = false; 
 		gamepanel.collisionCheck.collisiontile(this);
-		gamepanel.collisionCheck.checkObject(this, false);
+		gamepanel.collisionCheck.checkObject(this,true);
 		gamepanel.collisionCheck.entityCollision(this, gamepanel.NPC);
 		gamepanel.collisionCheck.entityCollision(this, gamepanel.monster);
 		
 		//MONSTER CONTACT WITH PLAYER
 		boolean contactWithplayer = gamepanel.collisionCheck.checkMainplayer(this);
-		if (this.type == 2  && contactWithplayer == true) {
+		if (this.type == type_monster  && contactWithplayer == true) {
 			if (gamepanel.player.invincible == false) {
 				gamepanel.player.life -= 1;
 				gamepanel.player.invincible = true; 
@@ -108,6 +155,7 @@ public class entityImage  {
 		}
 	}
 	
+	public boolean use(entityImage entity) {return false;}
 	
 	public void update() {
 			
@@ -149,6 +197,18 @@ public class entityImage  {
 			}
 		}	
 
+	public void checkItemDrop() {}
+	public void droppedItem(entityImage droppedItem) {
+		for(int i = 0; i < gamepanel.object.length; i++) {
+			if (gamepanel.object[gamepanel.currentMap][i] == null) {
+				gamepanel.object[gamepanel.currentMap][i] = droppedItem;
+				gamepanel.object[gamepanel.currentMap][i].Worldx = Worldx;
+				gamepanel.object[gamepanel.currentMap][i].Worldy = Worldy;
+				break;
+			}
+		}
+	}
+	
 
 	//DRAW ENTITY
 	public void draw(Graphics2D graphics2d) {
@@ -227,7 +287,7 @@ public class entityImage  {
 				dyingAnim(graphics2d);
 			}
 			
-			graphics2d.drawImage(image, screenX, screenY, gamepanel.tileSize, gamepanel.tileSize, null);
+			graphics2d.drawImage(image, screenX, screenY,  null);
 			graphics2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 			}
 		}
@@ -353,5 +413,41 @@ public class entityImage  {
 		}
 		
 	}
+	public int getDetected(entityImage user, entityImage target[][], String targetname) {
 	
+			int index = 999;
+			int nextWorldX = user.getleftx();
+			int nextWorldY = user.getrightx();
+			switch (user.directionString) {
+			case "UP":
+				nextWorldY = user.getTopY() - user.speed;
+				break;
+
+			case "DOWN":
+				nextWorldY = user.getBottomY() + user.speed;
+				break;
+
+			case "LEFT":
+				nextWorldX = user.getleftx() - user.speed;
+				break;
+
+			case "RIGHT":
+				nextWorldX = user.getrightx() + user.speed;
+				break;
+			}
+			int col = nextWorldX/gamepanel.tileSize;
+			int row = nextWorldY/gamepanel.tileSize;
+			
+			for (int i = 0; i < target[1].length; i++) {
+				if (target[gamepanel.currentMap][i] != null) {
+					if (target[gamepanel.currentMap][i].getCol() == col && target[gamepanel.currentMap]
+							[i].getRow() == row && target[gamepanel.currentMap][i].name.equals(targetname)) {
+						
+						index = i;
+						break;
+					}
+				}
+			}
+			return index;
+	} 
 }

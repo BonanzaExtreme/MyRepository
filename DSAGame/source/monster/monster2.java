@@ -6,6 +6,8 @@ import java.util.Random;
 
 import character.entityImage;
 import main.gamepanel;
+import objectfolder.key;
+import objectfolder.potion;
 
 public class monster2 extends entityImage {
 	gamepanel gamepanel;
@@ -45,7 +47,7 @@ public class monster2 extends entityImage {
 			RIGHT2= setup("/enemies/monster2_walk2", gamepanel.tileSize*i, gamepanel.tileSize*i);
 			LEFT1 = setup("/enemies/monster2_walk1", gamepanel.tileSize*i, gamepanel.tileSize*i);
 			LEFT2 = setup("/enemies/monster2_walk2", gamepanel.tileSize*i, gamepanel.tileSize*i);
-			STATIC = setup("/enemies/monster2_static", gamepanel.tileSize*i, gamepanel.tileSize*i);
+
 	}
 	public void getAttackImage() {
 		int i = 2; 
@@ -104,9 +106,6 @@ public class monster2 extends entityImage {
 				if (i > 75 && i <= 100) {
 					directionString = "RIGHT";
 				}
-				else {
-					directionString = "STATIC";
-				}
 				
 				actionCounter = 0; 	
 			}	
@@ -117,6 +116,14 @@ public class monster2 extends entityImage {
 	public void damageReact() {
 		actionCounter = 0;
 		onPath = true;
+	}
+		public void checkItemDrop() {
+		
+		int i = 100;
+		if (i == 100) {
+			droppedItem(new potion(gamepanel));		
+		}
+		
 	}
 	
 }	

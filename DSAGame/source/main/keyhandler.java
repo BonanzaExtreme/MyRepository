@@ -55,7 +55,8 @@ public class keyhandler implements KeyListener{
 			if(code == KeyEvent.VK_ENTER) {
 				if (gamepanel.state.commandNO == 0) {
 					gamepanel.gamestate = gamepanel.startstate;
-					gamepanel.kantastop(0);
+					gamepanel.kantastop();
+				
 					
 				}  
 				if (gamepanel.state.commandNO == 1) {
@@ -65,7 +66,7 @@ public class keyhandler implements KeyListener{
 		}	
 		
 		//Playing
-		if(gamepanel.gamestate == gamepanel.startstate){
+		else if(gamepanel.gamestate == gamepanel.startstate){
 		if(code == KeyEvent.VK_W) {
 			up = true;
 	
@@ -165,13 +166,14 @@ public class keyhandler implements KeyListener{
 				if (gamepanel.state.commandNO == 0) {
 					gamepanel.gamestate = gamepanel.startstate;
 					gamepanel.retry();
-					gamepanel.kantastop(1);
+					
+				
 					
 					
 				} else if (gamepanel.state.commandNO == 1) {
 					gamepanel.gamestate = gamepanel.titlescreen;
 					gamepanel.playKanta(0);
-					gamepanel.retry();
+		
 					
 				}
 			} 

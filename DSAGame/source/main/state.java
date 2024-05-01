@@ -75,6 +75,7 @@ public class state {
 		//Game over state
 		if (gamepanel.gamestate == gamepanel.gameover) {
 			drawGameoverScreen();
+	
 		}
 		if (gamepanel.gamestate == gamepanel.transition) {
 			drawTransition();
@@ -286,6 +287,8 @@ public class state {
 		graphics2d.setColor(Color.white);
 		graphics2d.drawString(text, x, y);
 		
+		
+	
 		
 		//MENU
 		graphics2d.setFont(graphics2d.getFont().deriveFont(Font.BOLD,35f));

@@ -32,7 +32,6 @@ public class gamepanel extends JPanel implements Runnable{
 	public final int screenHeight = tileSize * maxScreenRow; 
 	
 	
-	private int currentIndex = -1;
  
 	int fps = 60; 
 	
@@ -48,6 +47,9 @@ public class gamepanel extends JPanel implements Runnable{
 	
 	//Environment
 	environmentManage eManage = new environmentManage(this);
+	
+	//CutsceneManager
+	public cutsceneManager csManager = new cutsceneManager(this);
 	
 	//Event
 	public EventRect eventRect = new EventRect(this);
@@ -77,7 +79,7 @@ public class gamepanel extends JPanel implements Runnable{
 	//NPC ARRAY
 	public entityImage NPC[][] = new entityImage[maxMap][5];	
 	//Monster Array
-	public entityImage monster[][] = new entityImage[maxMap][20];
+	public entityImage monster[][] = new entityImage[maxMap][100];
 	
 
 	//Game State
@@ -89,6 +91,7 @@ public class gamepanel extends JPanel implements Runnable{
 	public final int gameover = 4; 
 	public final int transition = 5; 
 	public final int characterstate = 6;
+	public final int cutsceneSTATE = 7;
 
 	//panel
 	public gamepanel(){
@@ -224,7 +227,7 @@ public class gamepanel extends JPanel implements Runnable{
 			
 			// SORTING
 			Collections.sort(entitylistArrayList, new Comparator<entityImage>() {
-
+				
 				@Override
 				public int compare(entityImage o1, entityImage o2) {
 					int result = Integer.compare(o1.Worldy, o2.Worldy);
@@ -233,7 +236,6 @@ public class gamepanel extends JPanel implements Runnable{
 
 			});
 			
-			//Printing entities on the screen
 			for (int i = 0; i < entitylistArrayList.size(); i++) {
 				entitylistArrayList.get(i).draw(graphics2d);
 			}
@@ -243,9 +245,11 @@ public class gamepanel extends JPanel implements Runnable{
 			
 			eManage.draw(graphics2d);
 			
+			csManager.draw(graphics2d);
 			
 		}
 	
+		
 		//STATE
 		state.paintComponent(graphics2d);
 	} 
@@ -257,14 +261,11 @@ public class gamepanel extends JPanel implements Runnable{
 			sounds.setFile(i);
 			sounds.play();
 			sounds.loop();
-			currentIndex = i;
+			
 	
 		}
-		public void kantastop(int i) {
-			 if (currentIndex != -1) {
-			        sounds.stop();
-			        currentIndex = -1;
-			    }
+		public void kantastop() {
+			sounds.stop();
 			
 		}
 	

@@ -9,7 +9,7 @@ public class doorside extends entityImage {
 		super(gamepanel);
 		
 		name = "DoorSide";
-		STATIC = setup("/objects/doorsideway", gamepanel.tileSize, gamepanel.tileSize);
+		UP1 = setup("/objects/doorsideway", gamepanel.tileSize, gamepanel.tileSize);
 		collision = true; 
 		
 		solidAreaRectangle.x = 0;

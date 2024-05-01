@@ -111,7 +111,7 @@ public class Pathfinder {
 	}
 	
 	public boolean search() {
-		while (goalreached == false && step < 500) {
+		while (goalreached == false && step < 999) {
 			int col = currentNode.col;
 			int row = currentNode.row;
 			

@@ -2,9 +2,11 @@
 	import java.awt.AlphaComposite;
 	import java.awt.Color;
 	import java.awt.Font;
-	import java.awt.Graphics2D;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 	import java.awt.Rectangle;
 	import java.awt.image.BufferedImage;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 
@@ -24,7 +26,6 @@ import objectfolder.potion;
 		public final int screenY;
 		public ArrayList<entityImage> inventory = new ArrayList<>();
 		public final int maxinventorysize = 10;
-		int keyno = 0;
 		
 		public player(gamepanel gamepanel, keyhandler keyhandler) {
 			
@@ -58,7 +59,7 @@ import objectfolder.potion;
 			
 			Worldx = gamepanel.tileSize * 25;
 			Worldy = gamepanel.tileSize * 15; 
-			speed = 2; 
+			speed = 5; 
 			directionString = "STATIC"; 
 			invincible = false;
 			gamepanel.currentMap = 0; 
@@ -186,7 +187,7 @@ import objectfolder.potion;
 			
 			if (invincible == true) {
 				invincibleCounter++;
-				if (invincibleCounter > 30) {
+				if (invincibleCounter > 60) {
 					invincible = false;
 					invincibleCounter = 0;
 				}
@@ -198,54 +199,19 @@ import objectfolder.potion;
 				
 				if (life <= 0) {
 					gamepanel.gamestate = gamepanel.gameover;
+					gamepanel.state.commandNO = -1;
 					gamepanel.playSoundEffect(1);
 			     
 				}
 			}
 		
 		public void setItem() {
-			
+			inventory.add(new potion(gamepanel));
+			inventory.add(new key(gamepanel));
+			inventory.add(new key(gamepanel));
+		inventory.add(new key(gamepanel));
 		}
 			
-		public void attackingMeth() {
-			
-			spriteCounter++;
-			if (spriteCounter <= 5) {
-				 spriteNum = 1;
-			}
-			if (spriteCounter > 5 && spriteCounter <= 25) {
-				spriteNum = 2;
-				
-				int currentworldX = Worldx;
-				int currentworldY = Worldy;
-				int solidAreaWidth = solidAreaRectangle.width;
-				int solidAreaHeight = solidAreaRectangle.height;
-				
-				//Player Attack area adjustment
-				switch(directionString) {
-				case "UP": Worldy -= attackRangeRectangle.height; break;
-				case "DOWN": Worldy += attackRangeRectangle.height; break;
-				case "LEFT": Worldx -= attackRangeRectangle.width; break;
-				case "RIGHT": Worldx += attackRangeRectangle.width; break;
-				}
-				solidAreaRectangle.width = attackRangeRectangle.width;
-				solidAreaRectangle.height = attackRangeRectangle.height;
-				
-				int monsterIndex = gamepanel.collisionCheck.entityCollision(this, gamepanel.monster);
-				monsterDamage(monsterIndex);
-				
-				Worldx = currentworldX;
-				Worldy = currentworldY;
-				solidAreaRectangle.width = solidAreaWidth;
-				solidAreaRectangle.height = solidAreaHeight;
-			}
-			if (spriteCounter > 25) {
-				spriteNum = 1;
-				spriteCounter = 0;
-				attacking = false;
-			}
-			
-		}
 			
 		//NPC Interaction
 		public void npcInteraction(int i) {
@@ -254,14 +220,15 @@ import objectfolder.potion;
 				if (i != 999) {
 					 gamepanel.gamestate = gamepanel.dialogue;
 					 gamepanel.NPC[gamepanel.currentMap][i].speak();
-					 gamepanel.state.image = gamepanel.NPC[gamepanel.currentMap][i].STATIC;	
+					
 					}
 					 else {
 							gamepanel.playSoundEffect(2);
 							attacking = true;
+							
 						}
-						
-					 }
+				
+					 } 
 				}	
 		 
 		
@@ -279,7 +246,7 @@ import objectfolder.potion;
 		}
 		
 		//Monster damage to player
-		public void monsterDamage(int i) {
+		public void monsterDamage(int i,  entityImage attacker) {
 			if (i != 999) {
 				if (gamepanel.monster[gamepanel.currentMap][i].invincible == false) {
 					gamepanel.monster[gamepanel.currentMap][i].life -=1;
@@ -306,6 +273,7 @@ import objectfolder.potion;
 					
 				} else if (gamepanel.object[gamepanel.currentMap][i].type == type_door) {
 					if (gamepanel.keyhandler.enter == true) {
+						attacking = false; 
 						gamepanel.object[gamepanel.currentMap][i].interact();
 						
 					}
@@ -340,98 +308,62 @@ import objectfolder.potion;
 		
 		public void draw(Graphics2D graphics2d) {
 		    BufferedImage image = null;
-		    int temporaryx = screenX;
-		    int temporaryy = screenY;
+		    int tempx = screenX;
+		    int tempy = screenY;
 	
-		    	switch (directionString) {
-				case "UP": 
-					   if (attacking == false) {
-			            	if (spriteNum == 1) {
-			            		
-			            		image = UP1;
-				                
-				            } else if (spriteNum == 2) {
-				            	image = UP2;
-				                
-				            }
-			            }
-					   if (attacking == true) {
-						   temporaryy = screenY - gamepanel.tileSize;
-						   if (spriteNum == 1) {
-				                image = attackup1;
-				            } else if (spriteNum == 2) {
-				                image = attackup2;
-				            }
-			            
-					   }  
-				break; 
-				
-				case "DOWN": 
-					   if (attacking == false) {
-			            	if (spriteNum == 1) {
-				                image = DOWN1;
-				            } else if (spriteNum == 2) {
-				                image = DOWN2;
-				            }
-			            }
-					   if (attacking == true) {
-							if (spriteNum == 1) {
-				                image = attackdown1;
-				            } else if (spriteNum == 2) {
-				                image = attackdown2;
-				            }
-			            
-					   }  
-				break; 
-				case "LEFT":
-					  if (attacking == false) {
-			            	if (spriteNum == 1) {
-				                image = LEFT1;
-				            } else if (spriteNum == 2) {
-				                image = LEFT2;
-				            }
-						}
-			            
-			            if (attacking == true) {
-			            	temporaryx = screenX - gamepanel.tileSize;
-			            	if (spriteNum == 1) {
-				                image = attackleft1;
-				            } else if (spriteNum == 2) {
-				                image = attackleft2;
-				            }
-						}
-			   break;
-			   case "RIGHT":
-				      if (attacking == false) {
-			        	   if (spriteNum == 1) {
-				                image = RIGHT1;
-				            } else if (spriteNum == 2) {
-				                image = RIGHT2;
-				            }
-				            else {
-								image = STATIC;
-								
-							}
-			           	}
-			           if (attacking == true) {
-			        	   if (spriteNum == 1) {
-				                image = attackright1;
-				            } else if (spriteNum == 2) {
-				                image = attackright2;
-				            } else {
-								image = STATIC;
-								
-							}
-			           	} 
-			    break;
-			    case "STATIC":
-			    	image = STATIC; 
+			switch (directionString) {
+			case "UP":
+				if (attacking == false) {
+					if (spriteNum == 1 ) {image = UP1;}
+					if (spriteNum == 2 ) {image = UP2;}
+					}
+				if (attacking == true) {
+					tempy = screenY - gamepanel.tileSize;
+					if (spriteNum == 1 ) {image = attackup1;}
+					if (spriteNum == 2 ) {image = attackup2;}
+					}
+			break;
+			case "DOWN":
+				if (attacking == false) {
+					if (spriteNum == 1 ) {image = DOWN1;}
+					if (spriteNum == 2 ) {image = DOWN2;}
+					}
+				if (attacking == true) {
+					if (spriteNum == 1 ) {image = attackdown1;}
+					if (spriteNum == 2 ) {image = attackdown2;}
+					}
+			break;
+			case "LEFT":
+				if (attacking == false) {
+					if (spriteNum == 1 ) {image = LEFT1;}
+					if (spriteNum == 2 ) {image = LEFT2;}
+					}
+				if (attacking == true) {
+					 tempx = screenX - gamepanel.tileSize;
+					if (spriteNum == 1 ) {image = attackleft1;}
+					if (spriteNum == 2 ) {image = attackleft2;}
+					}
+			break;
+			case "RIGHT":
+				if (attacking == false) {
+					if (spriteNum == 1 ) {image = RIGHT1;}
+					if (spriteNum == 2 ) {image = RIGHT2;}
+					}
+				if (attacking == true) {
+					if (spriteNum == 1 ) {image = attackright1;}
+					if (spriteNum == 2 ) {image = attackright2;}
+					}
+			break;
+			case "STATIC": 
+				image = STATIC;
+			break;
+			
 			    }
 				
 		    	if (invincible == true) {
 		        graphics2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 		    }
-		    graphics2d.drawImage(image, temporaryx, temporaryy, null);
+		    graphics2d.drawImage(image, tempx, tempy, null);
 		    graphics2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}	
 	}

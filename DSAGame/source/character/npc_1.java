@@ -15,7 +15,7 @@ public class npc_1 extends entityImage {
 		super(gamepanel);
 	
 		
-		directionString = "STATIC";
+		directionString = "UP1";
 		speed = 1; 
 		
 		getNPC1Image();

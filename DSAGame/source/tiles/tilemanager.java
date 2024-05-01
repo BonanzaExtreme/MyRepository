@@ -66,7 +66,7 @@ public class tilemanager {
 		
 		    loadmap("/maps/MAP1.txt", 0);
 		    loadmap("/maps/map2.txt", 1);
-			
+		    loadmap("/maps/map4.txt", 2);
 			
 		}
 		

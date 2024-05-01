@@ -8,7 +8,7 @@ public class chest_design extends entityImage{
 		super(gamepanel);
 		
 		
-		type = type_design;
+		type = type_door;
 		name = "chest_design";
 		STATIC =  setup("/objects/chest_design", gamepanel.tileSize, gamepanel.tileSize); 
 		

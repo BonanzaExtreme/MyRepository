@@ -117,7 +117,7 @@ public class ResourceStarter {
 		gamepanel.object[mapNumber][17].Worldy = gamepanel.tileSize*24;
 		
 		gamepanel.object[mapNumber][18] = new skele(gamepanel);
-		gamepanel.object[mapNumber][18].Worldx = gamepanel.tileSize*31;
+		gamepanel.object[mapNumber][18].Worldx = gamepanel.tileSize*34;
 		gamepanel.object[mapNumber][18].Worldy = gamepanel.tileSize*26;
 		
 		gamepanel.object[mapNumber][19] = new skele(gamepanel);
@@ -125,8 +125,8 @@ public class ResourceStarter {
 		gamepanel.object[mapNumber][19].Worldy = gamepanel.tileSize*30;
 		
 		gamepanel.object[mapNumber][20] = new skele(gamepanel);
-		gamepanel.object[mapNumber][20].Worldx = gamepanel.tileSize*31;
-		gamepanel.object[mapNumber][20].Worldy = gamepanel.tileSize*32;
+		gamepanel.object[mapNumber][20].Worldx = gamepanel.tileSize*19;
+		gamepanel.object[mapNumber][20].Worldy = gamepanel.tileSize*34;
 		
 
 		gamepanel.object[mapNumber][21] = new Door(gamepanel);
@@ -138,11 +138,42 @@ public class ResourceStarter {
 		gamepanel.object[mapNumber][22].Worldx = gamepanel.tileSize*10;
 		gamepanel.object[mapNumber][22].Worldy = gamepanel.tileSize*26;
 		
-		mapNumber = 2;
+		
+		mapNumber = 3;
 		
 		gamepanel.object[mapNumber][23] = new treasure(gamepanel);
 		gamepanel.object[mapNumber][23].Worldx = gamepanel.tileSize*25;
 		gamepanel.object[mapNumber][23].Worldy = gamepanel.tileSize*11;
+		
+		mapNumber = 2;
+		
+		gamepanel.object[mapNumber][24] = new Door(gamepanel);
+		gamepanel.object[mapNumber][24].Worldx = gamepanel.tileSize*16;
+		gamepanel.object[mapNumber][24].Worldy = gamepanel.tileSize*2;
+		
+		gamepanel.object[mapNumber][25] = new chest(gamepanel, new potion(gamepanel));
+		gamepanel.object[mapNumber][25].Worldx = gamepanel.tileSize*2;
+		gamepanel.object[mapNumber][25].Worldy = gamepanel.tileSize*34;
+		
+		gamepanel.object[mapNumber][26] = new chest(gamepanel, new potion(gamepanel));
+		gamepanel.object[mapNumber][26].Worldx = gamepanel.tileSize*8;
+		gamepanel.object[mapNumber][26].Worldy = gamepanel.tileSize*38;
+		
+		gamepanel.object[mapNumber][27] = new chest(gamepanel, new potion(gamepanel));
+		gamepanel.object[mapNumber][27].Worldx = gamepanel.tileSize*41;
+		gamepanel.object[mapNumber][27].Worldy = gamepanel.tileSize*43;
+		
+		gamepanel.object[mapNumber][28] = new chest_design(gamepanel);
+		gamepanel.object[mapNumber][28].Worldx = gamepanel.tileSize*32;
+		gamepanel.object[mapNumber][28].Worldy = gamepanel.tileSize*17;
+
+		gamepanel.object[mapNumber][29] = new skele(gamepanel);
+		gamepanel.object[mapNumber][29].Worldx = gamepanel.tileSize*3;
+		gamepanel.object[mapNumber][29].Worldy = gamepanel.tileSize*14;
+		
+		gamepanel.object[mapNumber][30] = new skele(gamepanel);
+		gamepanel.object[mapNumber][30].Worldx = gamepanel.tileSize*10;
+		gamepanel.object[mapNumber][30].Worldy = gamepanel.tileSize*41;
 
 	
 	}
@@ -221,6 +252,59 @@ public class ResourceStarter {
 		gamepanel.monster[mapNumber][14] = new boss2(gamepanel);
 		gamepanel.monster[mapNumber][14].Worldx = gamepanel.tileSize*28;
 		gamepanel.monster[mapNumber][14].Worldy = gamepanel.tileSize*29;
+		
+		mapNumber = 2;
+		gamepanel.monster[mapNumber][15] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][15].Worldx = gamepanel.tileSize*5;
+		gamepanel.monster[mapNumber][15].Worldy = gamepanel.tileSize*12;
+		
+		gamepanel.monster[mapNumber][16] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][16].Worldx = gamepanel.tileSize*9;
+		gamepanel.monster[mapNumber][16].Worldy = gamepanel.tileSize*12;
+		
+		gamepanel.monster[mapNumber][17] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][17].Worldx = gamepanel.tileSize*11;
+		gamepanel.monster[mapNumber][17].Worldy = gamepanel.tileSize*16;
+		
+		gamepanel.monster[mapNumber][18] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][18].Worldx = gamepanel.tileSize*25;
+		gamepanel.monster[mapNumber][18].Worldy = gamepanel.tileSize*17;
+		
+		gamepanel.monster[mapNumber][19] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][19].Worldx = gamepanel.tileSize*16;
+		gamepanel.monster[mapNumber][19].Worldy = gamepanel.tileSize*8;
+		
+		gamepanel.monster[mapNumber][20] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][20].Worldx = gamepanel.tileSize*16;
+		gamepanel.monster[mapNumber][20].Worldy = gamepanel.tileSize*20;
+		
+		gamepanel.monster[mapNumber][21] = new monster2(gamepanel);
+		gamepanel.monster[mapNumber][21].Worldx = gamepanel.tileSize*9;
+		gamepanel.monster[mapNumber][21].Worldy = gamepanel.tileSize*42;
+		
+		gamepanel.monster[mapNumber][22] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][22].Worldx = gamepanel.tileSize*2;
+		gamepanel.monster[mapNumber][22].Worldy = gamepanel.tileSize*42;
+		
+		gamepanel.monster[mapNumber][23] = new monster2(gamepanel);
+		gamepanel.monster[mapNumber][23].Worldx = gamepanel.tileSize*29;
+		gamepanel.monster[mapNumber][23].Worldy = gamepanel.tileSize*42;
+		
+		gamepanel.monster[mapNumber][24] = new boss2(gamepanel);
+		gamepanel.monster[mapNumber][24].Worldx = gamepanel.tileSize*16;
+		gamepanel.monster[mapNumber][24].Worldy = gamepanel.tileSize*13;
+		
+		gamepanel.monster[mapNumber][25] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][25].Worldx = gamepanel.tileSize*19;
+		gamepanel.monster[mapNumber][25].Worldy = gamepanel.tileSize*44;
+		
+		gamepanel.monster[mapNumber][26] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][26].Worldx = gamepanel.tileSize*20;
+		gamepanel.monster[mapNumber][26].Worldy = gamepanel.tileSize*44;
+		
+		gamepanel.monster[mapNumber][27] = new monster1(gamepanel);
+		gamepanel.monster[mapNumber][27].Worldx = gamepanel.tileSize*19;
+		gamepanel.monster[mapNumber][27].Worldy = gamepanel.tileSize*43;
 		
 	}
 	

@@ -400,8 +400,10 @@ public class entityImage  {
 
 	//DRAW ENTITY
 	public void draw(Graphics2D graphics2d) {
+		BufferedImage image = null;
 		int screenX = Worldx - gamepanel.player.Worldx + gamepanel.player.screenX;
 		int screenY = Worldy - gamepanel.player.Worldy + gamepanel.player.screenY;
+		
 		
 		if(Worldx + gamepanel.tileSize*4 > gamepanel.player.Worldx - gamepanel.player.screenX && 
 		   Worldx - gamepanel.tileSize < gamepanel.player.Worldx + gamepanel.player.screenX &&
@@ -422,7 +424,7 @@ public class entityImage  {
 					if (spriteNum == 1 ) {image = attackup1;}
 					if (spriteNum == 2 ) {image = attackup2;}
 					}
-			break;
+				break;
 			case "DOWN":
 				if (attacking == false) {
 					if (spriteNum == 1 ) {image = DOWN1;}
@@ -432,7 +434,7 @@ public class entityImage  {
 					if (spriteNum == 1 ) {image = attackdown1;}
 					if (spriteNum == 2 ) {image = attackdown2;}
 					}
-			break;
+				break;
 			case "LEFT":
 				if (attacking == false) {
 					if (spriteNum == 1 ) {image = LEFT1;}
@@ -443,7 +445,7 @@ public class entityImage  {
 					if (spriteNum == 1 ) {image = attackleft1;}
 					if (spriteNum == 2 ) {image = attackleft2;}
 					}
-			break;
+				break;
 			case "RIGHT":
 				if (attacking == false) {
 					if (spriteNum == 1 ) {image = RIGHT1;}
@@ -453,7 +455,7 @@ public class entityImage  {
 					if (spriteNum == 1 ) {image = attackright1;}
 					if (spriteNum == 2 ) {image = attackright2;}
 					}
-			break;
+				break;
 			case "STATIC": 
 				image = STATIC;
 			break;

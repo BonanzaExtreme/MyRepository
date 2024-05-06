@@ -59,14 +59,14 @@ import objectfolder.potion;
 			
 			Worldx = gamepanel.tileSize * 25;
 			Worldy = gamepanel.tileSize * 15; 
-			speed = 5; 
+			speed = 3; 
 			directionString = "STATIC"; 
 			invincible = false;
 			gamepanel.currentMap = 0; 
 	
 			
 			//player life 
-			maxLife = 6;
+			maxLife = 8;
 			life = maxLife;
 		
 		}

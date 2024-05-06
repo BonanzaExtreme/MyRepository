@@ -121,7 +121,7 @@ public class Pathfinder {
 			if (row - 1 >= 0) {
 				openNode(node[col][row-1]);
 			}
-			if (row - 1 >= 0) {
+			if (col - 1 >= 0) {
 				openNode(node[col-1][row]);
 			}
 			if (row + 1	 < gamepanel.maxWorldRow) {

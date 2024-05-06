@@ -66,8 +66,8 @@ public class tilemanager {
 		
 		    loadmap("/maps/MAP1.txt", 0);
 		    loadmap("/maps/map2.txt", 1);
-		    loadmap("/maps/map4.txt", 2);
-			
+		    loadmap("/maps/MAP3.txt", 2);
+		    loadmap("/maps/map4.txt", 3);
 		}
 		
 		public void gettileImage() {

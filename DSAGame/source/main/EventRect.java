@@ -60,10 +60,13 @@ public class EventRect {
 		}
 		if (canInteract == true) {
 			if(hit(0,7,49,"DOWN") == true) {
-				teleport(1,	14,12);
+				teleport(1,14,12);
 			} 
 			if(hit(1,30,36,"DOWN") == true) {
-				teleport(2,25,15);
+				teleport(2,3,47);
+			} 
+			if(hit(2,16,1,"DOWN") == true) {
+				teleport(3,25,15);
 			} 
 			
 			
